@@ -20,6 +20,19 @@ async function getGitBranch(dirPath: string): Promise<string | null> {
   }
 }
 
+async function getUncommittedFilesCount(dirPath: string): Promise<number | null> {
+  try {
+    const { stdout } = await execAsync("git status --porcelain", {
+      cwd: dirPath,
+    });
+    // Each line represents a changed file
+    const lines = stdout.trim().split("\n").filter((line) => line.length > 0);
+    return lines.length;
+  } catch {
+    return null;
+  }
+}
+
 async function getDefaultBranchInfo(
   dirPath: string
 ): Promise<{ defaultBranch: string | null; commitsBehind: number | null }> {
@@ -192,6 +205,7 @@ async function analyzePackageJson(
   const packageManager = await detectPackageManager(dirPath);
   const { defaultBranch, commitsBehind } = await getDefaultBranchInfo(dirPath);
   const { prodBranch, commitsBehind: commitsBehindProd } = await getProdBranchInfo(dirPath);
+  const uncommittedFiles = await getUncommittedFilesCount(dirPath);
 
   // Create relative path by removing the basePath prefix
   let relativePath = packageJsonPath;
@@ -210,6 +224,7 @@ async function analyzePackageJson(
     commitsBehindDefault: commitsBehind,
     prodBranch,
     commitsBehindProd,
+    uncommittedFiles,
     reactVersion,
     nextVersion,
     isReactVulnerable: isReactVulnerable(reactVersion),
@@ -241,4 +256,5 @@ export async function scanForPackages(basePath: string): Promise<PackageInfo[]> 
 
   return packages;
 }
+
 

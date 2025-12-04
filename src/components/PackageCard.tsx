@@ -17,6 +17,7 @@ import {
   CheckCircle,
   Download,
   ExternalLink,
+  FilePen,
   GitBranch,
   GitCommit,
   Home,
@@ -187,6 +188,16 @@ export function PackageCard({ packageInfo }: PackageCardProps) {
                 <GitBranch className="h-3 w-3 mr-1" />
                 {packageInfo.gitBranch}
               </Badge>
+              {packageInfo.uncommittedFiles !== null &&
+                packageInfo.uncommittedFiles > 0 && (
+                  <Badge
+                    variant="outline"
+                    className="font-mono text-xs border-yellow-400 text-yellow-700 bg-yellow-50"
+                  >
+                    <FilePen className="h-3 w-3 mr-1" />
+                    {packageInfo.uncommittedFiles} uncommitted
+                  </Badge>
+                )}
               {/* Show button if: not on default branch OR on default branch but behind remote */}
               {packageInfo.defaultBranch &&
                 ((packageInfo.gitBranch !== "main" &&
@@ -359,3 +370,4 @@ export function PackageCard({ packageInfo }: PackageCardProps) {
     </Card>
   );
 }
+

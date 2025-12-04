@@ -42,3 +42,4 @@ export async function PackageList({ basePath, showOnlyVulnerable = false }: Pack
   return <PackageListClient packages={packages} initialFilter={showOnlyVulnerable} />;
 }
 
+

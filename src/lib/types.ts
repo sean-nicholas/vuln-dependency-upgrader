@@ -6,6 +6,7 @@ export interface PackageInfo {
   commitsBehindDefault: number | null;
   prodBranch: string | null;
   commitsBehindProd: number | null;
+  uncommittedFiles: number | null;
   reactVersion: string | null;
   nextVersion: string | null;
   isReactVulnerable: boolean;
@@ -17,4 +18,5 @@ export interface ScanResult {
   basePath: string;
   packages: PackageInfo[];
 }
+
 
