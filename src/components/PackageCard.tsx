@@ -44,7 +44,10 @@ export function PackageCard({ packageInfo }: PackageCardProps) {
   } | null>(null);
 
   const isVulnerable =
-    packageInfo.isReactVulnerable || packageInfo.isNextVulnerable;
+    packageInfo.isReactVulnerable ||
+    packageInfo.isNextVulnerable ||
+    packageInfo.isTypesReactVulnerable ||
+    packageInfo.isTypesReactDomVulnerable;
 
   const handleUpgrade = async () => {
     setIsUpgrading(true);
@@ -311,6 +314,46 @@ export function PackageCard({ packageInfo }: PackageCardProps) {
               </Badge>
             </div>
           )}
+          {packageInfo.typesReactVersion && (
+            <div className="flex items-center gap-2">
+              <span className="text-sm text-slate-600">@types/react:</span>
+              <Badge
+                variant={
+                  packageInfo.isTypesReactVulnerable
+                    ? "destructive"
+                    : "secondary"
+                }
+                className="font-mono"
+              >
+                {packageInfo.isTypesReactVulnerable ? (
+                  <AlertTriangle className="h-3 w-3 mr-1" />
+                ) : (
+                  <CheckCircle className="h-3 w-3 mr-1" />
+                )}
+                {packageInfo.typesReactVersion}
+              </Badge>
+            </div>
+          )}
+          {packageInfo.typesReactDomVersion && (
+            <div className="flex items-center gap-2">
+              <span className="text-sm text-slate-600">@types/react-dom:</span>
+              <Badge
+                variant={
+                  packageInfo.isTypesReactDomVulnerable
+                    ? "destructive"
+                    : "secondary"
+                }
+                className="font-mono"
+              >
+                {packageInfo.isTypesReactDomVulnerable ? (
+                  <AlertTriangle className="h-3 w-3 mr-1" />
+                ) : (
+                  <CheckCircle className="h-3 w-3 mr-1" />
+                )}
+                {packageInfo.typesReactDomVersion}
+              </Badge>
+            </div>
+          )}
           {packageInfo.packageManager && (
             <div className="flex items-center gap-2">
               <span className="text-sm text-slate-600">Package Manager:</span>
@@ -370,4 +413,3 @@ export function PackageCard({ packageInfo }: PackageCardProps) {
     </Card>
   );
 }
-

@@ -9,8 +9,12 @@ export interface PackageInfo {
   uncommittedFiles: number | null;
   reactVersion: string | null;
   nextVersion: string | null;
+  typesReactVersion: string | null;
+  typesReactDomVersion: string | null;
   isReactVulnerable: boolean;
   isNextVulnerable: boolean;
+  isTypesReactVulnerable: boolean;
+  isTypesReactDomVulnerable: boolean;
   packageManager: "npm" | "yarn" | "pnpm" | "bun" | null;
 }
 

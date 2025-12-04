@@ -7,7 +7,7 @@ import path from "path";
 import { promisify } from "util";
 import { scanForPackages } from "./scanner";
 import { PackageInfo } from "./types";
-import { getSafeNextVersion, getSafeReactVersion } from "./vulnerability";
+import { getSafeNextVersion, getSafeReactVersion, getSafeTypesReactVersion, getSafeTypesReactDomVersion } from "./vulnerability";
 
 const execAsync = promisify(exec);
 
@@ -73,6 +73,50 @@ export async function upgradePackage(packageInfo: PackageInfo) {
         }
         if (packageJson.devDependencies?.["react-dom"]) {
           packageJson.devDependencies["react-dom"] = newVersion;
+        }
+      }
+    }
+
+    // Update @types/react if vulnerable
+    if (packageInfo.isTypesReactVulnerable && packageInfo.typesReactVersion) {
+      const safeVersion = getSafeTypesReactVersion(packageInfo.typesReactVersion);
+      if (safeVersion) {
+        const actualVersion =
+          packageJson.devDependencies?.["@types/react"] || packageJson.dependencies?.["@types/react"];
+        const newVersion = buildNewVersion(
+          actualVersion || packageInfo.typesReactVersion,
+          safeVersion
+        );
+
+        if (packageJson.devDependencies?.["@types/react"]) {
+          packageJson.devDependencies["@types/react"] = newVersion;
+          hasChanges = true;
+        }
+        if (packageJson.dependencies?.["@types/react"]) {
+          packageJson.dependencies["@types/react"] = newVersion;
+          hasChanges = true;
+        }
+      }
+    }
+
+    // Update @types/react-dom if vulnerable
+    if (packageInfo.isTypesReactDomVulnerable && packageInfo.typesReactDomVersion) {
+      const safeVersion = getSafeTypesReactDomVersion(packageInfo.typesReactDomVersion);
+      if (safeVersion) {
+        const actualVersion =
+          packageJson.devDependencies?.["@types/react-dom"] || packageJson.dependencies?.["@types/react-dom"];
+        const newVersion = buildNewVersion(
+          actualVersion || packageInfo.typesReactDomVersion,
+          safeVersion
+        );
+
+        if (packageJson.devDependencies?.["@types/react-dom"]) {
+          packageJson.devDependencies["@types/react-dom"] = newVersion;
+          hasChanges = true;
+        }
+        if (packageJson.dependencies?.["@types/react-dom"]) {
+          packageJson.dependencies["@types/react-dom"] = newVersion;
+          hasChanges = true;
         }
       }
     }

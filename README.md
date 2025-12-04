@@ -15,6 +15,8 @@
 - ⚠️ **Vulnerability Detection** – Identifies vulnerable versions of:
   - **React 19.x** (safe: 19.0.1, 19.1.2, 19.2.1)
   - **Next.js 15.x & 16.x** (safe: 15.0.5, 15.1.9, 15.2.6, 15.3.6, 15.4.8, 15.5.7, 16.0.7)
+  - **@types/react 19.x** (safe: 19.0.8, 19.1.6)
+  - **@types/react-dom 19.x** (safe: 19.0.4, 19.1.5)
 - 📦 **Package Manager Detection** – Automatically detects npm, yarn, pnpm, or bun
 - 🌿 **Git Status Overview** – Shows for each project:
   - Current branch

@@ -28,11 +28,11 @@ export function PackageListClient({ packages, initialFilter = false }: PackageLi
   }, [router, searchParams, showOnlyVulnerable]);
 
   const vulnerableCount = packages.filter(
-    (p) => p.isReactVulnerable || p.isNextVulnerable
+    (p) => p.isReactVulnerable || p.isNextVulnerable || p.isTypesReactVulnerable || p.isTypesReactDomVulnerable
   ).length;
 
   const filteredPackages = showOnlyVulnerable
-    ? packages.filter((p) => p.isReactVulnerable || p.isNextVulnerable)
+    ? packages.filter((p) => p.isReactVulnerable || p.isNextVulnerable || p.isTypesReactVulnerable || p.isTypesReactDomVulnerable)
     : packages;
 
   return (

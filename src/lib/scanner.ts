@@ -3,7 +3,7 @@ import path from "path";
 import { exec } from "child_process";
 import { promisify } from "util";
 import { PackageInfo } from "./types";
-import { isReactVulnerable, isNextVulnerable } from "./vulnerability";
+import { isReactVulnerable, isNextVulnerable, isTypesReactVulnerable, isTypesReactDomVulnerable } from "./vulnerability";
 
 const execAsync = promisify(exec);
 
@@ -200,6 +200,8 @@ async function analyzePackageJson(
 
   const reactVersion = dependencies.react || devDependencies.react || null;
   const nextVersion = dependencies.next || devDependencies.next || null;
+  const typesReactVersion = devDependencies["@types/react"] || dependencies["@types/react"] || null;
+  const typesReactDomVersion = devDependencies["@types/react-dom"] || dependencies["@types/react-dom"] || null;
 
   const gitBranch = await getGitBranch(dirPath);
   const packageManager = await detectPackageManager(dirPath);
@@ -227,8 +229,12 @@ async function analyzePackageJson(
     uncommittedFiles,
     reactVersion,
     nextVersion,
+    typesReactVersion,
+    typesReactDomVersion,
     isReactVulnerable: isReactVulnerable(reactVersion),
     isNextVulnerable: isNextVulnerable(nextVersion),
+    isTypesReactVulnerable: isTypesReactVulnerable(typesReactVersion),
+    isTypesReactDomVulnerable: isTypesReactDomVulnerable(typesReactDomVersion),
     packageManager,
   };
 }
