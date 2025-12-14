@@ -196,7 +196,7 @@ export async function upgradePackage(packageInfo: PackageInfo) {
 export async function commitAndPush(packageInfo: PackageInfo) {
   const dirPath = path.dirname(packageInfo.path);
   const commitMessage =
-    "⬆️🔒️ Upgrade next and react to mitigate CVE-2025-55182 & CVE-2025-66478";
+    "⬆️🔒️ Upgrade Next.js to mitigate CVE-2025-55184, CVE-2025-55183 & CVE-2025-67779";
 
   try {
     // Stage all changes

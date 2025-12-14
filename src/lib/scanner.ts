@@ -3,7 +3,7 @@ import path from "path";
 import { exec } from "child_process";
 import { promisify } from "util";
 import { PackageInfo } from "./types";
-import { isReactVulnerable, isNextVulnerable, isTypesReactVulnerable, isTypesReactDomVulnerable } from "./vulnerability";
+import { isReactVulnerable, isNextVulnerable } from "./vulnerability";
 
 const execAsync = promisify(exec);
 
@@ -218,6 +218,14 @@ async function analyzePackageJson(
     }
   }
 
+  // Check Next.js vulnerability first
+  const nextVulnerable = isNextVulnerable(nextVersion);
+  
+  // React is only shown as vulnerable if Next.js is also vulnerable
+  // because the fix for React CVEs comes via Next.js upgrade (react-server-dom-* packages)
+  // If Next.js is already patched, React is effectively protected
+  const reactVulnerable = nextVulnerable && isReactVulnerable(reactVersion);
+
   return {
     path: packageJsonPath,
     relativePath,
@@ -231,10 +239,12 @@ async function analyzePackageJson(
     nextVersion,
     typesReactVersion,
     typesReactDomVersion,
-    isReactVulnerable: isReactVulnerable(reactVersion),
-    isNextVulnerable: isNextVulnerable(nextVersion),
-    isTypesReactVulnerable: isTypesReactVulnerable(typesReactVersion),
-    isTypesReactDomVulnerable: isTypesReactDomVulnerable(typesReactDomVersion),
+    isReactVulnerable: reactVulnerable,
+    isNextVulnerable: nextVulnerable,
+    // @types packages are just TypeScript definitions, not runtime code - no security concern
+    // They'll be updated silently along with the main packages
+    isTypesReactVulnerable: false,
+    isTypesReactDomVulnerable: false,
     packageManager,
   };
 }
