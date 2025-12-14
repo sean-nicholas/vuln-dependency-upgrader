@@ -13,6 +13,7 @@ import {
 import { PackageInfo } from "@/lib/types";
 import {
   AlertTriangle,
+  ArrowRight,
   ArrowUpCircle,
   CheckCircle,
   Download,
@@ -312,6 +313,15 @@ export function PackageCard({ packageInfo }: PackageCardProps) {
                 )}
                 {packageInfo.nextVersion}
               </Badge>
+              {packageInfo.isNextVulnerable && packageInfo.targetNextVersion && (
+                <>
+                  <ArrowRight className="h-3 w-3 text-slate-400" />
+                  <Badge variant="secondary" className="font-mono bg-emerald-100 text-emerald-800 border-emerald-200">
+                    <CheckCircle className="h-3 w-3 mr-1" />
+                    {packageInfo.targetNextVersion}
+                  </Badge>
+                </>
+              )}
             </div>
           )}
           {packageInfo.typesReactVersion && (

@@ -15,6 +15,8 @@ export interface PackageInfo {
   isNextVulnerable: boolean;
   isTypesReactVulnerable: boolean;
   isTypesReactDomVulnerable: boolean;
+  // Target versions for upgrade
+  targetNextVersion: string | null;
   packageManager: "npm" | "yarn" | "pnpm" | "bun" | null;
 }
 

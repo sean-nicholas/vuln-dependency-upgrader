@@ -3,7 +3,7 @@ import path from "path";
 import { exec } from "child_process";
 import { promisify } from "util";
 import { PackageInfo } from "./types";
-import { isReactVulnerable, isNextVulnerable } from "./vulnerability";
+import { isReactVulnerable, isNextVulnerable, getSafeNextVersion } from "./vulnerability";
 
 const execAsync = promisify(exec);
 
@@ -226,6 +226,9 @@ async function analyzePackageJson(
   // If Next.js is already patched, React is effectively protected
   const reactVulnerable = nextVulnerable && isReactVulnerable(reactVersion);
 
+  // Calculate target versions for upgrade
+  const targetNextVersion = nextVulnerable && nextVersion ? getSafeNextVersion(nextVersion) : null;
+
   return {
     path: packageJsonPath,
     relativePath,
@@ -245,6 +248,7 @@ async function analyzePackageJson(
     // They'll be updated silently along with the main packages
     isTypesReactVulnerable: false,
     isTypesReactDomVulnerable: false,
+    targetNextVersion,
     packageManager,
   };
 }
